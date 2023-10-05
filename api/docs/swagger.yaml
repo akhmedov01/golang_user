@@ -1,0 +1,285 @@
+definitions:
+  models.CreateUser:
+    properties:
+      age:
+        type: integer
+      login:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  models.LoginReq:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+  models.LoginRes:
+    properties:
+      token:
+        type: string
+    type: object
+  models.UpdateUser:
+    properties:
+      age:
+        type: integer
+      login:
+        type: string
+      name:
+        type: string
+    type: object
+  models.User:
+    properties:
+      age:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: string
+      login:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  response.ErrorResp:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /login:
+    get:
+      consumes:
+      - application/json
+      description: api for get user token
+      parameters:
+      - description: data of user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.LoginRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+      summary: Get Token
+      tags:
+      - USER
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: api for create user
+      parameters:
+      - description: data of user
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+      summary: Create User
+      tags:
+      - USER
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: get user
+      parameters:
+      - default: 10
+        description: limit for response
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - default: 1
+        description: page of req
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: filter by name
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+      summary: List User
+      tags:
+      - USER
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete user by id
+      parameters:
+      - description: User ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+      summary: Delete By Id
+      tags:
+      - USER
+    get:
+      consumes:
+      - application/json
+      description: get user by id
+      parameters:
+      - description: User ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+      summary: Get By Id
+      tags:
+      - USER
+    put:
+      consumes:
+      - application/json
+      description: api for update users
+      parameters:
+      - description: id of user
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: data of user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResp'
+      summary: Update User
+      tags:
+      - USER
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
